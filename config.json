@@ -14,25 +14,6 @@
             "path": "firefox",
             "executable": "firefox_setup.exe",
             "url": "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
-        },
-        {
-            "name": "Google Chrome",
-            "path": "google_chrome",
-            "executable": "chrome_setup.exe",
-            "url": "https://dl.google.com/chrome/install/ChromeStandaloneSetup64.exe"
-        },
-        {
-            "name": "7-Zip",
-            "path": "7zip",
-            "executable": "7z_setup.exe",
-            "url": "https://sourceforge.net/projects/sevenzip/files/latest/download"
-        },
-        {
-            "name": "Foxit Reader",
-            "path": "foxit_reader",
-            "executable": "foxit_setup.exe",
-            "url": "https://www.foxitsoftware.com/downloads/latest.html?product=Foxit-Reader&platform=Windows&version=&package_type=&language=English&distID="
         }
-
     ]
 }
