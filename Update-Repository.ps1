@@ -13,7 +13,7 @@
     Version:     1.0
     Author:      Kaalus
     DateCreated: 20210408
-    LastUpdate:  20210506
+    LastUpdate:  20211011
 
 #>
 
@@ -48,7 +48,9 @@ if ($Config) {
 
 if (!$RepositoryLocation -and $JSONConfig.settings.repositorylocation) {
     $RepositoryLocation = $JSONConfig.settings.repositorylocation
-} else {
+}
+
+if (!$RepositoryLocation) {
     Write-Error "Config file doesn't contain a repository location! Exiting..."
     exit
 }
@@ -60,7 +62,7 @@ Write-Log "Installer download script started, gathering jobs..."
 # Loop over all backup objects
 foreach ($installer in $JSONConfig.installers) {
     # Check the URL
-    if (!$installer.url) {
+    if (!$installer.url -and !$installer.repository) {
         Write-Error "No download URL path defined, skipping this installer!"
         # Go to the next installer
         continue
@@ -72,14 +74,34 @@ foreach ($installer in $JSONConfig.installers) {
         continue
     }
 
-    if (!$installer.name -or !$installer.path -or !$installer.executable -or !$installer.url) {
+    if (!$installer.name -or !$installer.path -or !$installer.executable) {
         continue
     }
 
-    # TODO verify that the URL is a valid http/https URL and not some bogus string
+    $type = if ($installer.type) { $installer.type } else { "direct" }
+
+    $global:url = ""
+    switch($type) {
+        "github" {
+            if (!$installer.repository) { continue }
+            # Obtain the latest release from Github
+            $url = "https://api.github.com/repos/" + $installer.repository + "/releases/latest"
+            Write-Host "Getting latest release for " + $installer.repository
+            $version = Invoke-RestMethod -Uri $url
+            $url = $version.assets[0].browser_download_url
+        }
+        "direct" {
+            $url = $installer.url
+        }
+    }
+
+    if (!$url -like "http*") {
+        Write-Error "Invalid download URL, skipping this installer."
+        continue
+    }
 
     # Create the outputfolder to download the installer to
-    $targetfolder = Join-Path -Path $JSONConfig.settings.repositorylocation -ChildPath $installer.path
+    $targetfolder = Join-Path -Path $RepositoryLocation -ChildPath $installer.path
     $downloadfile = Join-Path -Path $targetfolder -ChildPath $installer.executable
 
     if (!(Test-Path $targetfolder)) {
@@ -87,8 +109,8 @@ foreach ($installer in $JSONConfig.installers) {
     }
 
     # Download the setup file
-    Write-Log ("Downloading: " + $installer.name)
-    Invoke-RestMethod -Uri $installer.url -OutFile $downloadfile
+    Write-Log ("Downloading: " + $installer.name + ", from: " + $url)
+    Invoke-RestMethod -Uri $url -OutFile $downloadfile
     Write-Log ($installer.name + " download finished!")
 }
 

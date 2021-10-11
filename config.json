@@ -6,14 +6,23 @@
         {
             "name": "Visual Studio Code",
             "path": "vs_code",
-            "executable": "vscode_setup.exe",
-            "url" : "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64"
+            "type": "direct",
+            "url" : "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64",
+            "executable": "vscode_setup.exe"
         },
         {
             "name": "Mozilla Firefox",
             "path": "firefox",
-            "executable": "firefox_setup.exe",
-            "url": "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+            "type": "direct",
+            "url": "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US",
+            "executable": "firefox_setup.exe"
+        },
+        {
+            "name": "PowerToys",
+            "path": "powertoys",
+            "type": "github",
+            "repository": "microsoft/powertoys",
+            "executable": "powertoys.exe"
         }
     ]
 }
