@@ -1,6 +1,7 @@
 {
     "settings": {
-        "repositorylocation": "H:\\test\\"
+        "repositorylocation": "C:\\software\\",
+        "createSubdirectories": false
     },
     "installers": [
         {
@@ -8,21 +9,28 @@
             "path": "vs_code",
             "type": "direct",
             "url" : "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64",
-            "executable": "vscode_setup.exe"
+            "executable": "VSCode_latest_setup.exe"
         },
         {
             "name": "Mozilla Firefox",
             "path": "firefox",
             "type": "direct",
             "url": "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US",
-            "executable": "firefox_setup.exe"
+            "executable": "Firefox_latest_setup.exe"
         },
         {
             "name": "PowerToys",
             "path": "powertoys",
             "type": "github",
             "repository": "microsoft/powertoys",
-            "executable": "powertoys.exe"
+            "executable": "powertoys_latest.exe"
+        },
+		{
+            "name": "gsudo",
+            "path": "gsduo",
+            "type": "github",
+            "repository": "gerardog/gsudo",
+            "executable": "gsudo_latest.msi"
         }
     ]
 }

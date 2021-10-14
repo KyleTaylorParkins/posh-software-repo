@@ -10,10 +10,10 @@
     
 .NOTES
     Script name: Update-Repository.ps1
-    Version:     1.0
+    Version:     1.3
     Author:      Kaalus
     DateCreated: 20210408
-    LastUpdate:  20211011
+    LastUpdate:  20211014
 
 #>
 
@@ -54,6 +54,8 @@ if (!$RepositoryLocation) {
     Write-Error "Config file doesn't contain a repository location! Exiting..."
     exit
 }
+
+$global:subDirectories = $JSONConfig.settings.createSubdirectories
 
 $LogFile = "installer_download.log"
 
@@ -101,7 +103,7 @@ foreach ($installer in $JSONConfig.installers) {
     }
 
     # Create the outputfolder to download the installer to
-    $targetfolder = Join-Path -Path $RepositoryLocation -ChildPath $installer.path
+    $targetfolder = if ($subDirectories) { Join-Path -Path $RepositoryLocation -ChildPath $installer.path } else { $RepositoryLocation }
     $downloadfile = Join-Path -Path $targetfolder -ChildPath $installer.executable
 
     if (!(Test-Path $targetfolder)) {
