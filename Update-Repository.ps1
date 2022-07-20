@@ -32,7 +32,9 @@ function Write-Log {
 
     $TimeStamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
     Write-Host ($TimeStamp + " " + $LogMessage)
-    Add-Content -Path $LogFile -Value $($TimeStamp + " " + $LogMessage)
+    if ($LogFile) {
+        Add-Content -Path $LogFile -Value $($TimeStamp + " " + $LogMessage)
+    }
 }
 
 $ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
@@ -91,6 +93,10 @@ foreach ($installer in $JSONConfig.installers) {
             Write-Host "Getting latest release for " + $installer.repository
             $version = Invoke-RestMethod -Uri $url
             $url = $version.assets[0].browser_download_url
+            # Hacky way to workarround powertoys arm64 installer being the first result
+            if ($url.toLower().Contains("arm64")) {
+                $url = $version.assets[1].browser_download_url
+            }
         }
         "direct" {
             $url = $installer.url
